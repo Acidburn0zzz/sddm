@@ -42,6 +42,7 @@
 #include <QDeclarativeEngine>
 #endif
 #include <QDebug>
+#include <QFile>
 #include <QTranslator>
 
 #include <iostream>
@@ -121,6 +122,9 @@ namespace SDDM {
 
         // read theme config
         m_themeConfig = new ThemeConfig(configFile);
+        if (QFile::exists(configFile + ".user")) {
+            configFile += ".user";
+        }
 
         // create models
 
