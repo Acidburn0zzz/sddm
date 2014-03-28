@@ -105,6 +105,7 @@ namespace SDDM {
         // read theme metadata
         m_metadata = new ThemeMetadata(QString("%1/metadata.desktop").arg(themePath));
 
+
         // Translations
         // Components translation
         m_components_tranlator = new QTranslator();
@@ -119,13 +120,12 @@ namespace SDDM {
 
         // get theme config file
         QString configFile = QString("%1/%2").arg(themePath).arg(m_metadata->configFile());
-
-        // read theme config
-        m_themeConfig = new ThemeConfig(configFile);
         if (QFile::exists(configFile + ".user")) {
             configFile += ".user";
         }
 
+        // read theme config
+        m_themeConfig = new ThemeConfig(configFile);
         // create models
 
         m_sessionModel = new SessionModel();
