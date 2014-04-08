@@ -120,9 +120,6 @@ namespace SDDM {
 
         // get theme config file
         QString configFile = QString("%1/%2").arg(themePath).arg(m_metadata->configFile());
-        if (QFile::exists(configFile + ".user")) {
-            configFile += ".user";
-        }
 
         // read theme config
         m_themeConfig = new ThemeConfig(configFile);
