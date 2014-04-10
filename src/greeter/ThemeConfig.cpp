@@ -34,7 +34,7 @@ namespace SDDM {
         }
         // read user set themes overwriting defaults if they exist
         for (const QString &key: userSettings.allKeys()) {
-            if (!userSettings.value(key).isNull()) {
+            if (!userSettings.value(key).toString().isEmpty()) {
                 insert(key, userSettings.value(key));
             }
         }
