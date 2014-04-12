@@ -211,8 +211,7 @@ namespace SDDM {
         if (passwordless) {
             m_pam = new PamService("sddm", user, password, passwordless);
         } else {
-            //yes this says lightdm
-            m_pam = new PamService("lightdm-autologin", user, password, passwordless);
+            m_pam = new PamService("sddm-autologin", user, password, passwordless);
         }
 
         if (!m_pam)
