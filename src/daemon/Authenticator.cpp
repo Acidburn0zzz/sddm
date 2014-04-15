@@ -243,6 +243,13 @@ namespace SDDM {
         if ((m_pam->result = pam_set_item(m_pam->handle, PAM_XDISPLAY, qPrintable(m_display->name()))) != PAM_SUCCESS)
             return false;
 
+        //set the seat name. This is saves the logind PAM module trying to find it.
+        //The logind pam module is not always able to find it if we have only just started the X server
+        QString pamSeatEnv = "XDG_SEAT=" + seat->name();
+        pam_putenv(m_pam->handle, qPrintable(pamSeatEnv));
+
+
+
         // open session
         if ((m_pam->result = pam_open_session(m_pam->handle, 0)) != PAM_SUCCESS)
             return false;
