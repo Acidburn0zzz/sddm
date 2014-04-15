@@ -248,7 +248,8 @@ namespace SDDM {
         QString pamSeatEnv = "XDG_SEAT=" + seat->name();
         pam_putenv(m_pam->handle, qPrintable(pamSeatEnv));
 
-
+        QString pamVtnrEnv = "XDG_VTNR=" + QString::number(m_display->terminalId());
+        pam_putenv(m_pam->handle, qPrintable(pamVtnrEnv));
 
         // open session
         if ((m_pam->result = pam_open_session(m_pam->handle, 0)) != PAM_SUCCESS)
