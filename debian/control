@@ -8,39 +8,54 @@ Build-Depends: debhelper (>= 8.0.0),
                pkg-config,
                libxcb1-dev,
                libxcb-xkb-dev,
-               libqt4-dev | qtbase5-dev,
+               qtbase5-dev,
                libsystemd-login-dev,
-               libupower-glib-dev
+               libupower-glib-dev,
+               qttools5-dev,
+               qtdeclarative5-dev,
+               qttools5-dev-tools,
 Standards-Version: 3.9.4
 Homepage: https://github.com/sddm/sddm
 
 Package: sddm
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, sddm-theme-maui, adduser
+Depends: ${shlibs:Depends}, ${misc:Depends}, sddm-theme, adduser,
+ qtdeclarative5-qtquick2-plugin
 Description: modern display manager for X11
  It uses modern technologies like QtQuick, which in turn gives the designer
  the ability to create smooth, animated user interfaces.
 
+Package: sddm-data
+Architecture: any
+Depends: ${misc:Depends}
+Description: data files for SDDM X11 display manager
+ various data files for SDDM such as flag icons and
+ translations
+
 Package: sddm-theme-maui
 Architecture: all
-Depends: sddm
+Depends: sddm, ${misc:Depends}
+Provides: sddm-theme
 Description: Default theme for SDDM X11 display manager
  Maui theme for SDDM
 
 Package: sddm-theme-circles
 Architecture: all
-Depends: sddm
+Depends: sddm, ${misc:Depends}
+Provides: sddm-theme
 Description: Theme for SDDM X11 display manager
  Circles theme for SDDM
 
 Package: sddm-theme-elarun
 Architecture: all
-Depends: sddm
+Depends: sddm, ${misc:Depends}
+Provides: sddm-theme
 Description: Theme for SDDM X11 display manager
  Elarun theme for SDDM
 
 Package: sddm-theme-maldives
 Architecture: all
-Depends: sddm
+Depends: sddm, ${misc:Depends}
+Provides: sddm-theme
 Description: Theme for SDDM X11 display manager
  Maldives theme for SDDM
