@@ -77,6 +77,11 @@ namespace SDDM {
         // start greeter
         m_process->start(QString("%1/sddm-greeter").arg(BIN_INSTALL_DIR), { "--socket", m_socket, "--theme", m_theme });
 
+        //if we fail to start bail immediately, and don't block in waitForStarted
+        if (m_process->state() == QProcess::NotRunning) {
+            qCritical() << "DAEMON: Greeter failed to launch.";
+            return false;
+        }
         // wait for greeter to start
         if (!m_process->waitForStarted()) {
             // log message
