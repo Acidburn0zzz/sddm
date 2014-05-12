@@ -22,9 +22,15 @@
 #include "Configuration.h"
 #include "Constants.h"
 #include "DaemonApp.h"
+#include "Session.h"
+#include "Display.h"
 
 #include <QDebug>
 #include <QProcess>
+
+#include <sys/types.h>
+#include <pwd.h>
+#include <unistd.h>
 
 namespace SDDM {
     Greeter::Greeter(QObject *parent) : QObject(parent) {
@@ -55,8 +61,29 @@ namespace SDDM {
         if (m_started)
             return false;
 
+        struct passwd *pw = nullptr;
+        if (!daemonApp->configuration()->testing)
+        {
+            pw = getpwnam(qPrintable("sddm"));
+            if (!pw) {
+                qWarning() << " DAEMON: Failed to switch to switch greeter to user sddm";
+                //continue anyway?? Otherwise we'll block out everyone self compiling
+                //from logging in
+            }
+        }
+        
         // create process
-        m_process = new QProcess(this);
+        m_process = new Session("greeter", this);
+
+        if (pw) {
+            m_process->setUser(pw->pw_name);
+            m_process->setDir(pw->pw_dir);
+            m_process->setUid(pw->pw_uid);
+            m_process->setGid(pw->pw_gid);
+
+            //take ownership of the socket so we can read/write to it
+            chown(qPrintable(m_socket), pw->pw_uid, pw->pw_uid);
+        }
 
         // delete process on finish
         connect(m_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished()));

@@ -22,9 +22,9 @@
 
 #include <QObject>
 
-class QProcess;
-
 namespace SDDM {
+    class Session;
+
     class Greeter : public QObject {
         Q_OBJECT
         Q_DISABLE_COPY(Greeter)
@@ -54,7 +54,7 @@ namespace SDDM {
         QString m_socket { "" };
         QString m_theme { "" };
 
-        QProcess *m_process { nullptr };
+        Session *m_process { nullptr };
     };
 }
 
