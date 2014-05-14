@@ -74,6 +74,8 @@ namespace SDDM {
         
         // create process
         m_process = new Session("greeter", this);
+        // set process environment
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
         if (pw) {
             m_process->setUser(pw->pw_name);
@@ -83,6 +85,8 @@ namespace SDDM {
 
             //take ownership of the socket so we can read/write to it
             chown(qPrintable(m_socket), pw->pw_uid, pw->pw_uid);
+            env.insert("HOME", pw->pw_dir);
+            env.insert("USER", "sddm");
         }
 
         // delete process on finish
@@ -94,8 +98,6 @@ namespace SDDM {
         // log message
         qDebug() << " DAEMON: Greeter starting...";
 
-        // set process environment
-        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         env.insert("DISPLAY", m_display);
         env.insert("XAUTHORITY", m_authPath);
         env.insert("XCURSOR_THEME", daemonApp->configuration()->cursorTheme());
