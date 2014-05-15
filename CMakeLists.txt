@@ -5,6 +5,7 @@ project(SDDM)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_definitions(-Wall -march=native -std=c++11)
 
