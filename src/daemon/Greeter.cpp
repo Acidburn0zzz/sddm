@@ -87,6 +87,13 @@ namespace SDDM {
             chown(qPrintable(m_socket), pw->pw_uid, pw->pw_uid);
             env.insert("HOME", pw->pw_dir);
             env.insert("USER", "sddm");
+
+            //unset any random stuff we inherit from parent relating to home
+            //Neon5 specific patch
+            env.insert("XDG_CONFIG_HOME", QString());
+            env.insert("XDG_CACHE_HOME", QString());
+            env.insert("XDG_DATA_HOME", QString());
+            env.insert("KDEHOME", QString());
         }
 
         // delete process on finish
