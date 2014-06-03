@@ -63,9 +63,9 @@ namespace SDDM {
 
     GreeterApp *GreeterApp::self = nullptr;
 
-    GreeterApp::GreeterApp(int argc, char **argv) :
+    GreeterApp::GreeterApp() :
 #ifdef USE_QT5
-    QGuiApplication(argc, argv)
+    QObject()
 #else
     QApplication(argc, argv)
 #endif
@@ -76,14 +76,14 @@ namespace SDDM {
         // Parse arguments
         bool testing = false;
 
-        if (arguments().contains("--test-mode"))
+        if (QCoreApplication::arguments().contains("--test-mode"))
             testing = true;
 
         // get socket name
-        QString socket = parameter(arguments(), "--socket", "");
+        QString socket = parameter(QCoreApplication::arguments(), "--socket", "");
 
         // get theme path
-        QString themePath = parameter(arguments(), "--theme", "");
+        QString themePath = parameter(QCoreApplication::arguments(), "--theme", "");
 
         // Initialize
     #ifdef USE_QT5
@@ -108,13 +108,13 @@ namespace SDDM {
         // Components translation
         m_components_tranlator = new QTranslator();
         if (m_components_tranlator->load(QLocale::system(), "", "", COMPONENTS_TRANSLATION_DIR))
-            installTranslator(m_components_tranlator);
+            QCoreApplication::installTranslator(m_components_tranlator);
 
         // Theme specific translation
         m_theme_translator = new QTranslator();
         if (m_theme_translator->load(QLocale::system(), "", "",
                            QString("%1/%2/").arg(themePath, m_metadata->translationsDirectory())))
-            installTranslator(m_theme_translator);
+            QCoreApplication::installTranslator(m_theme_translator);
 
         // get theme config file
         QString configFile = QString("%1/%2").arg(themePath).arg(m_metadata->configFile());
@@ -200,7 +200,8 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    SDDM::GreeterApp app(argc, argv);
+    QGuiApplication app(argc, argv);
+    SDDM::GreeterApp x;
 
     return app.exec();
 }
