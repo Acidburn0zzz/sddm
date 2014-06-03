@@ -44,7 +44,7 @@ namespace SDDM {
 
     class GreeterApp : public
 #ifdef USE_QT5
-    QGuiApplication
+    QObject
 #else
     QApplication
 #endif
@@ -52,7 +52,7 @@ namespace SDDM {
         Q_OBJECT
         Q_DISABLE_COPY(GreeterApp)
     public:
-        explicit GreeterApp(int argc, char **argv);
+        explicit GreeterApp();
 
         static GreeterApp *instance() { return self; }
 
