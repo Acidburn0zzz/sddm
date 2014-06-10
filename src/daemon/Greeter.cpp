@@ -91,12 +91,7 @@ namespace SDDM {
                 m_process->setUid(pw->pw_uid);
                 m_process->setGid(pw->pw_gid);
 
-            //unset any random stuff we inherit from parent relating to home
-            //Neon5 specific patch
-            env.insert("XDG_CONFIG_HOME", QString());
-            env.insert("XDG_CACHE_HOME", QString());
-            env.insert("XDG_DATA_HOME", QString());
-            env.insert("KDEHOME", QString());
+
             }
 
             // delete process on finish
@@ -114,6 +109,14 @@ namespace SDDM {
             env.insert("XAUTHORITY", m_authPath);
             env.insert("XCURSOR_THEME", daemonApp->configuration()->cursorTheme());
             m_process->setProcessEnvironment(env);
+
+        //unset any random stuff we inherit from parent relating to home
+        //Neon5 specific patch
+        env.insert("XDG_CONFIG_HOME", QString());
+        env.insert("XDG_CACHE_HOME", QString());
+        env.insert("XDG_DATA_HOME", QString());
+        env.insert("KDEHOME", QString());
+
 
             // start greeter
             QStringList args;
