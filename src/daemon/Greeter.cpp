@@ -103,20 +103,39 @@ namespace SDDM {
             // log message
             qDebug() << "Greeter starting...";
 
-            // set process environment
+        // set process environment
             QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
             env.insert("DISPLAY", m_display->name());
             env.insert("XAUTHORITY", m_authPath);
             env.insert("XCURSOR_THEME", daemonApp->configuration()->cursorTheme());
-            m_process->setProcessEnvironment(env);
 
-        //unset any random stuff we inherit from parent relating to home
-        //Neon5 specific patch
-        env.insert("XDG_CONFIG_HOME", QString());
-        env.insert("XDG_CACHE_HOME", QString());
-        env.insert("XDG_DATA_HOME", QString());
-        env.insert("KDEHOME", QString());
+        // Overwrite some envrionment variables to reflect the new passwd data.
+        env.insert("HOME", pw->pw_dir);
+        env.insert("LOGNAME", pw->pw_name);
+        env.insert("PWD", pw->pw_dir);
+        env.insert("USER", pw->pw_name);
+        env.insert("USERNAME", pw->pw_name);
 
+        // Remove potential envrionment variables that contain user specific path data.
+        // Since they are *may* be user specific we cannot let them stick around
+        // nor can we try to adjust them for the greeter user as they can have
+        // completely arbitrary formats.
+        // Should a greeter theme need certain envrionment variables they must to be
+        // set up in the greeter to ensure that they reflect the actual greeter
+        // user rather than the daemon user.
+        env.remove("KDEHOME");
+        env.remove("KDETMP");
+        env.remove("KDEVARTMP");
+        env.remove("MAIL");
+        env.remove("SUDO_USER");
+        env.remove("SUDO_UID");
+        env.remove("SUDO_COMMAND");
+        env.remove("XDG_CACHE_HOME");
+        env.remove("XDG_CONFIG_HOME");
+        env.remove("XDG_DATA_HOME");
+
+        // Actually set the prepared envrionment...
+        m_process->setProcessEnvironment(env);
 
             // start greeter
             QStringList args;
